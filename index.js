@@ -9,7 +9,11 @@ app.use(express.json());
 // Your proxy route
 app.post('/zoho-webhook', async (req, res) => {
   try {
-    const response = await axios.post('https://www.zohoapis.in/crm/v7/functions/createleadincrm/actions/execute?auth_type=apikey&zapikey=1003.07c8503f374f9116af06400203f51266.e5c825a950e4b63ea3c81b59d0dd41cc', req.body);
+    const { name, phone } = req.body;
+    const url = `https://www.zohoapis.in/crm/v7/functions/createleadincrm/actions/execute?auth_type=apikey&zapikey=1003.07c8503f374f9116af06400203f51266.e5c825a950e4b63ea3c81b59d0dd41cc&fn=${encodeURIComponent(name)}&ph=${encodeURIComponent(phone)}`;
+
+    //const response = await axios.post('https://www.zohoapis.in/crm/v7/functions/createleadincrm/actions/execute?auth_type=apikey&zapikey=1003.07c8503f374f9116af06400203f51266.e5c825a950e4b63ea3c81b59d0dd41cc', req.body);
+    const response = await axios.post(url, req.body);
     res.status(200).send(response.data);
   } catch (error) {
     res.status(500).send({ error: error.message });
